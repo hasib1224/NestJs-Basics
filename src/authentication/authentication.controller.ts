@@ -1,5 +1,13 @@
-import { Body, Controller, Post, Res,Get,Req, UseGuards } from '@nestjs/common';
-import { Response,Request } from 'express';
+import {
+  Body,
+  Controller,
+  Post,
+  Res,
+  Get,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { Response, Request } from 'express';
 import { AuthUserDto } from './dtos/auth.user.dto';
 import { AuthenticationService } from './authentication.service';
 import { CurrentUser } from './decorators/currentUser.decorator';
@@ -31,6 +39,7 @@ export class AuthenticationController {
   }
 
   @Post('/signout')
+  @UseGuards(CookieAuthGuard)
   async signout(@Res({ passthrough: true }) res: Response) {
     // Clear the authentication cookie
     res.clearCookie('Authentication', { path: '/' });
@@ -39,9 +48,7 @@ export class AuthenticationController {
 
   @Get('/who')
   @UseGuards(CookieAuthGuard)
-  who(@CurrentUser() user:string ){
+  who(@CurrentUser() user: string) {
     return user;
-  } 
-
-
+  }
 }
