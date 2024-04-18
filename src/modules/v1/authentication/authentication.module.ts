@@ -4,8 +4,9 @@ import { AuthenticationController } from './authentication.controller';
 import { HashingService } from './hashing/hashing.service';
 import { BcryptService } from './hashing/bcrypt.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/user/user.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { User } from '../user/user.entity';
+import { JwtCookieStrategy } from './strategies/jwtCookie.strategy';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.register({
       secret: 'topSecret92', // SECRET KEY 
       signOptions: {
-        expiresIn: 86400, // TOKEN EXPIRY TIME
+        expiresIn: 86400, 
       },
     }),
   ],
@@ -23,6 +24,7 @@ import { JwtModule } from '@nestjs/jwt';
       provide: HashingService,
       useClass: BcryptService,
     },
+    JwtCookieStrategy
   ],
   controllers: [AuthenticationController],
 })

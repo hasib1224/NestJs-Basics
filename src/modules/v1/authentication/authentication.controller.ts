@@ -28,20 +28,20 @@ export class AuthenticationController {
     @Res({ passthrough: true }) res: Response,
     @Body() body: AuthUserDto,
   ) {
-    const token = await this.authService.signin(body.email, body.password);
+    const ret = await this.authService.signin(body.email, body.password);
 
-    res.cookie('Authentication', token, {
+    res.cookie('Authentication', ret.token, {
       httpOnly: true,
       path: '/',
       maxAge: 86400,
     });
-    return { message: 'Signin successful' };
+    // return res.send(ret);
+    return {message:"hiiii"}
   }
 
   @Post('/signout')
   @UseGuards(CookieAuthGuard)
   async signout(@Res({ passthrough: true }) res: Response) {
-    // Clear the authentication cookie
     res.clearCookie('Authentication', { path: '/' });
     return { message: 'Signout successful' };
   }

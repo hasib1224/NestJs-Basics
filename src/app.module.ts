@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/v1/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthenticationModule } from './authentication/authentication.module';
-import { PostModule } from './post/post.module';
+import { AuthenticationModule } from './modules/v1/authentication/authentication.module';
+import { PostModule } from './modules/v1/post/post.module';
+import { AuthModule } from './modules/shared/auth/auth.module';
+import { DatabaseModule } from './modules/shared/database/database.module';
+
 
 
 @Module({
@@ -20,7 +23,9 @@ import { PostModule } from './post/post.module';
   }),
   UserModule,
   AuthenticationModule,
-  PostModule,],
+  PostModule,
+  AuthModule,
+  DatabaseModule,],
   controllers: [AppController],
   providers: [AppService],
 })

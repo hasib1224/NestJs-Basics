@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
 import { HashingService } from './hashing/hashing.service';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class AuthenticationService {
@@ -34,9 +34,9 @@ export class AuthenticationService {
             throw new UnauthorizedException('Invalid credentials');
         }
 
-        const payload = { email: user.email, userId: user.id }; // Customize payload as needed
+        const payload = { email: user.email, userId: user.id }; 
         const token = this.jwtService.sign(payload);
-
-        return token;        
+        
+        return {user,status:'success',token};        
     }
 }

@@ -5,6 +5,9 @@ export class CookieAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const cookies = request.headers?.cookie?.split('; ');
+    
+    const {user} = context.switchToHttp().getRequest();
+    console.log(user);
 
     if (Array.isArray(cookies)) {
       const authToken = cookies.find(cookie => cookie.startsWith('Authentication='));
