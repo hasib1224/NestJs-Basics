@@ -6,13 +6,15 @@ import {
   Get,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { AuthUserDto } from './dtos/auth.user.dto';
 import { AuthenticationService } from './authentication.service';
-import { CurrentUser } from './decorators/currentUser.decorator';
 import { useContainer } from 'class-validator';
 import { CookieAuthGuard } from './guards/auth.guard';
+import { AuthInterceptor } from '../../../common/interceptor/auth.interceptor';
+import { CurrentUser } from 'src/common/decorator/user.decorator';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -35,8 +37,7 @@ export class AuthenticationController {
       path: '/',
       maxAge: 86400,
     });
-    // return res.send(ret);
-    return {message:"hiiii"}
+    return { message: 'hiiii' };
   }
 
   @Post('/signout')
@@ -48,7 +49,9 @@ export class AuthenticationController {
 
   @Get('/who')
   @UseGuards(CookieAuthGuard)
-  who(@CurrentUser() user: string) {
+  @UseInterceptors(AuthInterceptor)
+  who(@CurrentUser() user: any, @Req() req: Request) {
+    console.log(user, 'req');
     return user;
   }
 }

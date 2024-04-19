@@ -7,24 +7,27 @@ import {
   HttpException,
   Req,
   UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
 import { Response } from 'express';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dtos/createPost.dto';
 import { Request } from 'express';
-import { AuthGuard } from '@nestjs/passport';
+import { CookieAuthGuard } from 'src/modules/shared/authentication/guards/auth.guard';
+import { AuthInterceptor } from 'src/common/interceptor/auth.interceptor';
+import { CurrentUser } from 'src/common/decorator/user.decorator';
+
 
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @UseGuards(AuthGuard('jwt-cookie'))
+  @UseGuards(CookieAuthGuard)
+  @UseInterceptors(AuthInterceptor)
   @Post()
-  async createPost(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
+  async createPost(@Body() createPostDto: CreatePostDto, @Req() req: Request,@CurrentUser() user: any) {
     
-    const userId = req.headers.user as string;
-    const cookies = req.headers.cookie;
+    const post=this.postService.createPost(createPostDto,user.userId);
 
-    
   }
 }

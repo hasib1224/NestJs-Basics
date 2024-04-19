@@ -5,8 +5,8 @@ import { HashingService } from './hashing/hashing.service';
 import { BcryptService } from './hashing/bcrypt.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { User } from '../user/user.entity';
-import { JwtCookieStrategy } from './strategies/jwtCookie.strategy';
+import { User } from 'src/modules/v1/user/user.entity';
+import { CookieAuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { JwtCookieStrategy } from './strategies/jwtCookie.strategy';
       provide: HashingService,
       useClass: BcryptService,
     },
-    JwtCookieStrategy
+    CookieAuthGuard
   ],
   controllers: [AuthenticationController],
 })
