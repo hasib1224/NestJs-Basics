@@ -17,21 +17,7 @@ async function bootstrap() {
     }),
   );
 
-  const options: SwaggerDocumentOptions =  {
-    operationIdFactory: (
-      controllerKey: string,
-      methodKey: string
-    ) => methodKey
-  };
-
-  const config = new DocumentBuilder()
-    .setTitle('Basic NestJS App')
-    .setDescription('Auth Api Description')
-    .setVersion('1.0')
-    .addTag('auth')
-    .build();
-  const document = SwaggerModule.createDocument(app, config, options);
-  SwaggerModule.setup(SWAGGER_API_ROOT, app, document);
+  middleware(app);
 
   await app.listen(3000);
 }
